@@ -11,10 +11,7 @@ export async function POST(req:Request) {
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: pw
-      });
-    if(error) return NextResponse.json({error:error}, {status:500})
-    return NextResponse.json({data:data, status:200});
+    const { error } = await supabase.auth.signOut();
+    if(error) return Response.json({status:401});
+    return NextResponse.json({status:200});
 }
