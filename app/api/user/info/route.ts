@@ -21,9 +21,12 @@ export async function GET(req:Request) {
         .from('GroupMembers')
         .select('group_id')
         .eq('user_id', user_id);
-    if (error || grouperror) {
+    if (error) {
         console.error("Error fetching user info:", error);
         return NextResponse.json({ error: "Failed to fetch user info" }, { status: 500 });
+    }
+    if(grouperror){
+        return NextResponse.json({ error: "Failed to fetch group id" }, { status: 500 });
     }
     
     const groupIds = groupMembers!.map(member => member.group_id);
@@ -46,6 +49,7 @@ export async function GET(req:Request) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    if(error) return NextResponse.json({error:error},{status:500});
     return NextResponse.json({info:userInfo,groups:groups}, {status:200});
 }
 

@@ -24,6 +24,14 @@ export async function POST(req:Request) {
         {founder:user_id, name:group_name, tags:tags},
     ])
     .select()
+    const { data:groupMember, error:error } = await supabase
+    .from('GroupMembers')
+    .insert([
+        {group_id:groupInfo![0].group_id, user_id:user_id},
+    ])
+    .select()
+
+    if(err||error) return NextResponse.json({error:err},{status:500});
     if(err) NextResponse.json({error: err}, {status:500});
     return NextResponse.json({data:groupInfo}, {status:200});
 }
