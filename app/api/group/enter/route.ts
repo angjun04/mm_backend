@@ -34,7 +34,7 @@ export async function POST(req:Request) {
     return NextResponse.json({data:groupMember}, {status:200});
 }
 
-export async function Delete(req:Request) {
+export async function DELETE(req:Request) {
     const { group_id, user_id } = await req.json();
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
