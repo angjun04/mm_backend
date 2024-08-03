@@ -46,7 +46,7 @@ export async function GET(req:Request) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({userInfo,groups}, {status:200});
+    return NextResponse.json({info:userInfo,groups:groups}, {status:200});
 }
 
 export async function POST(req:Request) {
