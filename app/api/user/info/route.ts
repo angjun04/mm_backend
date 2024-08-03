@@ -3,9 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function GET(req:Request) {
     const { searchParams } = new URL(req.url)
-    const nickname = searchParams.get('nickname');
     const user_id = searchParams.get('user_id');
-    if (!nickname) {
+    if (!user_id) {
         return NextResponse.json({ error: "User ID is required" }, { status: 400 });
     }
     const supabase = createClient(
@@ -15,7 +14,7 @@ export async function GET(req:Request) {
     let { data: userInfo, error } = await supabase
         .from('userInfo')
         .select('*')
-        .eq('nickname', nickname)
+        .eq('user_id', user_id)
         .single();
     let { data: groupMembers, error:grouperror } = await supabase
         .from('GroupMembers')
@@ -26,7 +25,7 @@ export async function GET(req:Request) {
         return NextResponse.json({ error: "Failed to fetch user info" }, { status: 500 });
     }
     if(grouperror){
-        return NextResponse.json({ error: "Failed to fetch group id" }, { status: 500 });
+        return NextResponse.json({ error: grouperror }, { status: 500 });
     }
     
     const groupIds = groupMembers!.map(member => member.group_id);
