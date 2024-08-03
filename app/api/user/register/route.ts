@@ -22,7 +22,7 @@ export async function POST(req:Request) {
     }); 
     if(error) {
         console.log(error);
-        return NextResponse.json({err:"failed", status:500});
+        return NextResponse.json({err:"failed"}, {status:500});
     }
     const { data:userInfo, error:err } = await supabase
     .from('userInfo')
