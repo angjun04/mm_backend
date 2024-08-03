@@ -15,6 +15,6 @@ export async function POST(req:Request) {
         email: email,
         password: pw
       });
-    if(error) return NextResponse.json({error:error}, {status:500})
+    if(error) return NextResponse.json({error:error,status:500})
     return NextResponse.json({data:data, status:200});
 }

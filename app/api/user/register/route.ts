@@ -6,7 +6,7 @@ export async function GET(req:Request) {
 }
 
 export async function POST(req:Request) {
-    const {email, pw, nickname, social_login_type} = await req.json();
+    const {email, pw, nickname} = await req.json();
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
