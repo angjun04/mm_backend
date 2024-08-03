@@ -3,8 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function GET(req:Request) {
     const { searchParams } = new URL(req.url)
-    const nickname = searchParams.get('nickname')
-
+    const nickname = searchParams.get('nickname');
+    const user_id = searchParams.get('user_id');
     if (!nickname) {
         return NextResponse.json({ error: "User ID is required" }, { status: 400 });
     }
@@ -17,17 +17,36 @@ export async function GET(req:Request) {
         .select('*')
         .eq('nickname', nickname)
         .single();
-    
-    if (error) {
+    let { data: groupMembers, error:grouperror } = await supabase
+        .from('GroupMembers')
+        .select('group_id')
+        .eq('user_id', user_id);
+    if (error || grouperror) {
         console.error("Error fetching user info:", error);
         return NextResponse.json({ error: "Failed to fetch user info" }, { status: 500 });
     }
+    
+    const groupIds = groupMembers!.map(member => member.group_id);
 
+    if (groupIds.length === 0) {
+        return NextResponse.json({ userInfo, groups: [], status: 200 });
+    }
+
+  // Fetch group names
+    let { data: groups, error: groupsError } = await supabase
+        .from('Groups')
+        .select('group_id, name')
+        .in('group_id', groupIds);
+
+    if (groupsError) {
+        console.error("Error fetching group names:", groupsError);
+        return NextResponse.json({ error: "Failed to fetch group names" }, { status: 500 });
+    }
     if (!userInfo) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json({userInfo, status:200});
+    return NextResponse.json({userInfo,groups}, {status:200});
 }
 
 export async function POST(req:Request) {
