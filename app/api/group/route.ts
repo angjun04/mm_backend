@@ -18,5 +18,5 @@ export async function GET(req:Request) {
 }
 
 export async function POST(req:Request) {
-    return NextResponse.json("this is api/group test");
+    return NextResponse.json("this is api/group post");
 }

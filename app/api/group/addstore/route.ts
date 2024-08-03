@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from '@supabase/supabase-js'
 
 export async function GET(req:Request) {
-    return Response.json("this is api/group/enter get");
+    return NextResponse.json("this is api/group/addstore get");
 }
 
 export async function POST(req:Request) {
